@@ -86,6 +86,8 @@ function Home() {
         color: isDay ? "black" : "white",
         backgroundColor: isDay ? "white" : "black",
         width: "100%",
+        height: "100vh",
+        overflowY: "scroll",
       }}
     >
       {SelectDayNight(isDay, setIsDay)}
@@ -127,8 +129,9 @@ function SelectDayNight(isDay, setIsDay) {
         width: "100%",
         justifyContent: "space-evenly",
         position: "absolute",
-        margin: "20px 0",
+        padding: "20px 0",
         top: 0,
+        backgroundColor: isDay ? "white" : "black",
       }}
     >
       <span
