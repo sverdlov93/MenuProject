@@ -7,6 +7,7 @@ import gif2 from "./assets/gif2.gif";
 import gif3 from "./assets/gif3.gif";
 import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
+import plus from "./assets/plus.svg";
 
 export default function BasicExample() {
   return (
@@ -26,21 +27,27 @@ export default function BasicExample() {
 }
 // in your app.
 
-function MenuItem(item) {
+function MenuItem(item, isDay) {
+  const [isSelected, setIsSelected] = useState(false);
   return (
     <div
       style={{
         cursor: "pointer",
-        borderBottom: "1px solid rgba(0, 0, 0, .3)",
+        borderBottom: `1px solid rgba(${isDay ? "0,0,0" : "255,255,255"}, .3)`,
         height: "120px",
         width: "90%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "35px 35px 28px 20px",
+        backgroundColor: isSelected ? "#90D2DA" : "",
       }}
       onClick={() => {
-        axios.post(`/selectedImage`, { id: 1 });
+        setIsSelected(true);
+        setTimeout(() => {
+          axios.post(`/selectedImage`, { id: 1 });
+          setIsSelected(false);
+        }, 3000);
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -70,41 +77,95 @@ function MenuItem(item) {
 }
 
 function Home() {
+  const [isDay, setIsDay] = useState(true);
+  const selectedMenu = menuItems[isDay ? "day" : "night"];
   return (
     <div
       style={{
         fontFamily: "Space Grotesk",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        color: isDay ? "black" : "white",
+        backgroundColor: isDay ? "white" : "black",
         width: "100%",
       }}
     >
+      {SelectDayNight(isDay, setIsDay)}
+      {CreateYourOwn(isDay)}
       <div
         style={{
-          fontWeight: 500,
-          fontSize: "14px",
           display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           width: "100%",
-          justifyContent: "space-evenly",
-          margin: "20px 0",
+          paddingTop: "40px",
         }}
       >
-        <div width>Day menu</div>
-        <div>/</div>
-        <div>Night menu</div>
+        <div
+          style={{
+            borderBottom: `1px solid  ${isDay ? "black" : "white"}`,
+            padding: "45px 20px",
+            fontWeight: 400,
+            fontSize: "32px",
+            width: "-webkit-fill-available",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {selectedMenu.headline}
+        </div>
+        {selectedMenu.items.map((item) => MenuItem(item, isDay))}
       </div>
-      <div
-        style={{
-          borderBottom: "1px solid black",
-          padding: "45px 20px",
-          fontWeight: 400,
-          fontSize: "32px",
-        }}
+    </div>
+  );
+}
+
+function SelectDayNight(isDay, setIsDay) {
+  return (
+    <div
+      style={{
+        fontWeight: 500,
+        fontSize: "14px",
+        display: "flex",
+        width: "100%",
+        justifyContent: "space-evenly",
+        position: "absolute",
+        margin: "20px 0",
+        top: 0,
+      }}
+    >
+      <span
+        style={{ pointer: "cursor", opacity: isDay ? 1 : 0.3 }}
+        onClick={() => setIsDay(true)}
       >
-        Your daily dose of desire has arrived.
-      </div>
-      {menuItems.map((item) => MenuItem(item))}
+        Day menu
+      </span>
+      <span>/</span>
+      <span
+        style={{ pointer: "cursor", opacity: !isDay ? 1 : 0.3 }}
+        onClick={() => setIsDay(false)}
+      >
+        Night menu
+      </span>
+    </div>
+  );
+}
+
+function CreateYourOwn(isDay) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        width: "-webkit-fill-available",
+        position: "absolute",
+        padding: "23px 19px",
+        bottom: 0,
+        backgroundColor: isDay ? "white" : "black",
+        justifyContent: "space-between",
+        borderTop: `1px solid  ${isDay ? "black" : "white"}`,
+      }}
+    >
+      <span fontSize="18px" fontWeight="400" letterSpacing="0.02em">
+        Create your own desire
+      </span>
+      <img src={plus} width="19px" height="auto" />
     </div>
   );
 }
@@ -143,25 +204,55 @@ function Screen() {
   );
 }
 
-const menuItems = [
-  {
-    name: "Take a breath",
-    summery: "Relaxing, sweet, juicy and luckewarm",
+const menuItems = {
+  day: {
+    headline: "Your daily dose of desire has arrived.",
+    items: [
+      {
+        name: "Take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "Hit refresh",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "Wake me up",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+    ],
   },
-  {
-    name: "take a breath",
-    summery: "Relaxing, sweet, juicy and luckewarm",
+  night: {
+    headline: "Night cravings?\nWe got you.",
+    items: [
+      {
+        name: "Take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "Hit refresh",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "Wake me up",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+      {
+        name: "take a breath",
+        summery: "Relaxing, sweet, juicy and luckewarm",
+      },
+    ],
   },
-  {
-    name: "take a breath",
-    summery: "Relaxing, sweet, juicy and luckewarm",
-  },
-  {
-    name: "take a breath",
-    summery: "Relaxing, sweet, juicy and luckewarm",
-  },
-  {
-    name: "take a breath",
-    summery: "Relaxing, sweet, juicy and luckewarm",
-  },
-];
+};
