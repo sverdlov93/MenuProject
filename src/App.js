@@ -325,7 +325,7 @@ const menuItems = {
         size: "bite",
       },
       {
-        name: "take a breath",
+        name: "Take a breath",
         summery: "Relaxing, bitter, liquid, hot, light meal",
         desire: "Relaxing",
         taste: "bitter",
