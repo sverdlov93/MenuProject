@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, createRef } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import gif3 from "./assets/gif3.gif";
 import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
 import plus from "./assets/plus.svg";
+import arrowLeft from "./assets/arrowLeft.svg";
 
 export default function BasicExample() {
   return (
@@ -15,7 +16,7 @@ export default function BasicExample() {
       <div>
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Menu />
           </Route>
           <Route path="/screen">
             <Screen />
@@ -27,71 +28,136 @@ export default function BasicExample() {
 }
 // in your app.
 
-function MenuItem(item, isDay) {
+function Menu() {
+  const [isDay, setIsDay] = useState(true);
   const [isSelected, setIsSelected] = useState(false);
-  return (
-    <div
-      style={{
-        cursor: "pointer",
-        borderBottom: `1px solid rgba(${isDay ? "0,0,0" : "255,255,255"}, .3)`,
-        height: "120px",
-        width: "90%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "35px 35px 28px 20px",
-        backgroundColor: isSelected ? "#90D2DA" : "",
-      }}
-      onClick={() => {
-        setIsSelected(true);
-        setTimeout(() => {
-          axios.post(`/selectedImage`, { id: 1 });
-          setIsSelected(false);
-        }, 3000);
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+  const [selectedItem, setSelectedItem] = useState(undefined);
+  const selectedMenu = menuItems[isDay ? "day" : "night"];
+
+  function MenuItem(item, index) {
+    return (
+      <div
+        key={index}
+        style={{
+          cursor: "pointer",
+          borderBottom: `1px solid rgba(${
+            isDay ? "0,0,0" : "255,255,255"
+          }, .3)`,
+          height: "120px",
+          width: "90%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "35px 35px 28px 20px",
+          backgroundColor: selectedItem == index ? "#90D2DA" : "",
+        }}
+        onClick={() => {
+          setSelectedItem(index);
+          setTimeout(() => {
+            axios.post(`/selectedImage`, { id: index });
+            setIsSelected(true);
+          }, 3000);
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span
+            style={{
+              fontWeight: 400,
+              fontSize: "22px",
+              letterSpacing: "0.02em",
+            }}
+          >
+            {item.name}
+          </span>
+          <img src={arrow} width="32px" height="auto" />
+        </div>
         <span
           style={{
-            fontWeight: 400,
-            fontSize: "22px",
+            width: "65%",
+            fontWeight: 300,
+            fontSize: "16px",
+            letterSpacing: "0.03em",
+          }}
+        >
+          {item.summery}
+        </span>
+      </div>
+    );
+  }
+
+  function SelectDayNight() {
+    return (
+      <div
+        style={{
+          fontWeight: 500,
+          fontSize: "14px",
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-evenly",
+          position: "absolute",
+          padding: "20px 0",
+          top: 0,
+          backgroundColor: isDay ? "white" : "black",
+        }}
+      >
+        <span
+          style={{ pointer: "cursor", opacity: isDay ? 1 : 0.3 }}
+          onClick={() => setIsDay(true)}
+        >
+          Day menu
+        </span>
+        <span>/</span>
+        <span
+          style={{ pointer: "cursor", opacity: !isDay ? 1 : 0.3 }}
+          onClick={() => setIsDay(false)}
+        >
+          Night menu
+        </span>
+      </div>
+    );
+  }
+
+  function GetFooter() {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "-webkit-fill-available",
+          position: "absolute",
+          padding: "23px 19px",
+          bottom: 0,
+          backgroundColor: isDay ? "white" : "black",
+          justifyContent: !isSelected ? "space-between" : "center",
+          borderTop: `1px solid  ${isDay ? "black" : "white"}`,
+        }}
+        onClick={() => setSelectedItem(undefined)}
+      >
+        {isSelected ? (
+          <img
+            src={arrowLeft}
+            width="5"
+            height="auto"
+            style={{ marginRight: "13px" }}
+          />
+        ) : undefined}
+        <span
+          style={{
+            fontSize: "18px",
+            fontWeight: "400",
             letterSpacing: "0.02em",
           }}
         >
-          {item.name}
+          {isSelected ? "Your next desire" : "Create your own desire"}
         </span>
-        <img src={arrow} width="32px" height="auto" />
+        {!isSelected ? (
+          <img src={plus} width="19px" height="auto" />
+        ) : undefined}
       </div>
-      <span
-        style={{
-          width: "65%",
-          fontWeight: 300,
-          fontSize: "16px",
-          letterSpacing: "0.03em",
-        }}
-      >
-        {item.summery}
-      </span>
-    </div>
-  );
-}
+    );
+  }
 
-function Home() {
-  const [isDay, setIsDay] = useState(true);
-  const selectedMenu = menuItems[isDay ? "day" : "night"];
-  return (
-    <div
-      style={{
-        fontFamily: "Space Grotesk",
-        color: isDay ? "black" : "white",
-        backgroundColor: isDay ? "white" : "black",
-        width: "100%",
-        height: "100vh",
-        overflowY: "scroll",
-      }}
-    >
-      {SelectDayNight(isDay, setIsDay)}
-      {CreateYourOwn(isDay)}
+  function GetMenuItems() {
+    return (
       <div
         style={{
           display: "flex",
@@ -113,62 +179,109 @@ function Home() {
         >
           {selectedMenu.headline}
         </div>
-        {selectedMenu.items.map((item) => MenuItem(item, isDay))}
+        {selectedMenu.items.map((item, index) => MenuItem(item, index))}
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-function SelectDayNight(isDay, setIsDay) {
+  function SelectedItem() {
+    function getSelection(key, value) {
+      return (
+        <div
+          style={{
+            margin: "50px 0 0 20px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <span
+            style={{
+              fontWeight: "300",
+              fontSize: "16px",
+              opacity: 0.7,
+              letterSpacing: "0.04em",
+              textTransform: "capitalize",
+            }}
+          >
+            {key}:
+          </span>
+          <span
+            style={{
+              fontWeight: "400",
+              fontSize: "24px",
+              letterSpacing: "0.03em",
+              textTransform: "capitalize",
+            }}
+          >
+            {value}
+          </span>
+        </div>
+      );
+    }
+    return (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            padding: "120px 0 45px 20px",
+            display: "flex",
+            flexDirection: "column",
+            borderBottom: "1px solid black",
+          }}
+        >
+          <span
+            style={{
+              fontWeight: "300",
+              fontSize: "16px",
+              opacity: 0.7,
+              letterSpacing: "0.04em",
+            }}
+          >
+            Your chosen desire:
+          </span>
+          <span
+            style={{
+              fontWeight: "300",
+              fontSize: "16px",
+              opacity: 0.7,
+              letterSpacing: "0.04em",
+            }}
+            style={{
+              fontWeight: "400",
+              fontSize: "32px",
+              letterSpacing: "0.03em",
+            }}
+          >
+            {selectedMenu.items[selectedItem].desire}
+          </span>
+        </div>
+        {getSelection("taste", selectedMenu.items[selectedItem].taste)}
+        {getSelection("texture", selectedMenu.items[selectedItem].texture)}
+        {getSelection("temp", selectedMenu.items[selectedItem].temp)}
+        {getSelection("size", selectedMenu.items[selectedItem].size)}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
-        fontWeight: 500,
-        fontSize: "14px",
-        display: "flex",
+        fontFamily: "Space Grotesk",
+        color: isDay ? "black" : "white",
+        backgroundColor: isDay ? "white" : "black",
         width: "100%",
-        justifyContent: "space-evenly",
-        position: "absolute",
-        padding: "20px 0",
-        top: 0,
-        backgroundColor: isDay ? "white" : "black",
+        height: "100vh",
+        overflowY: "scroll",
       }}
     >
-      <span
-        style={{ pointer: "cursor", opacity: isDay ? 1 : 0.3 }}
-        onClick={() => setIsDay(true)}
-      >
-        Day menu
-      </span>
-      <span>/</span>
-      <span
-        style={{ pointer: "cursor", opacity: !isDay ? 1 : 0.3 }}
-        onClick={() => setIsDay(false)}
-      >
-        Night menu
-      </span>
-    </div>
-  );
-}
-
-function CreateYourOwn(isDay) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        width: "-webkit-fill-available",
-        position: "absolute",
-        padding: "23px 19px",
-        bottom: 0,
-        backgroundColor: isDay ? "white" : "black",
-        justifyContent: "space-between",
-        borderTop: `1px solid  ${isDay ? "black" : "white"}`,
-      }}
-    >
-      <span fontSize="18px" fontWeight="400" letterSpacing="0.02em">
-        Create your own desire
-      </span>
-      <img src={plus} width="19px" height="auto" />
+      {!isSelected ? (
+        <>
+          {SelectDayNight()}
+          {GetMenuItems()}
+        </>
+      ) : (
+        SelectedItem()
+      )}
+      {GetFooter()}
     </div>
   );
 }
