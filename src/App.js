@@ -130,7 +130,10 @@ function Menu() {
           justifyContent: !isSelected ? "space-between" : "center",
           borderTop: `1px solid  ${isDay ? "black" : "white"}`,
         }}
-        onClick={() => setSelectedItem(undefined)}
+        onClick={() => {
+          setSelectedItem(undefined);
+          setIsSelected(false);
+        }}
       >
         {isSelected ? (
           <img
