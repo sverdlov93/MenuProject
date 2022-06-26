@@ -1,4 +1,4 @@
-import { React, useState, useEffect, cf } from "react";
+import { React, useState, useEffect, state } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
@@ -9,7 +9,6 @@ import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
 import plus from "./assets/plus.svg";
 import arrowLeft from "./assets/arrowLeft.svg";
-import { func } from "prop-types";
 
 export default function BasicExample() {
   return (
@@ -31,9 +30,9 @@ export default function BasicExample() {
 
 function Menu() {
   const [isDay, setIsDay] = useState(true);
-  const [isSelected, setIsSelected] = useState(false);
   const [selectedItem, setSelectedItem] = useState(undefined);
   const [chooseType, setChooseType] = useState(undefined);
+  const [selectedTaste, setSelectedTaste] = useState(undefined);
   const selectedMenu = menuItems[isDay ? "day" : "night"];
 
   function MenuItem(item, index) {
@@ -51,14 +50,13 @@ function Menu() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "35px 35px 28px 20px",
-          backgroundColor: selectedItem == index ? "#90D2DA" : "",
         }}
-        onClick={() => {
-          setSelectedItem(index);
+        onClick={(e) => {
+          e.currentTarget.style.backgroundColor = "#90D2DA";
           setTimeout(() => {
             axios.post(`/selectedImage`, { id: index });
-            setIsSelected(true);
-          }, 3000);
+            setSelectedItem(index);
+          }, 2000);
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -120,6 +118,7 @@ function Menu() {
   }
 
   function GetFooter() {
+    const isSelected = selectedItem != undefined;
     return (
       chooseType == undefined && (
         <div
@@ -138,7 +137,6 @@ function Menu() {
             isSelected
               ? () => {
                   setSelectedItem(undefined);
-                  setIsSelected(false);
                 }
               : () => setChooseType(0)
           }
@@ -198,10 +196,52 @@ function Menu() {
   }
 
   function ChooseYourOwn() {
+    function Cell(item, span) {
+      return (
+        <td
+          key={item}
+          rowSpan={span?.rowSpan}
+          colSpan={span?.colSpan}
+          style={{
+            backgroundColor:
+              selectedTaste == item
+                ? "#" + Math.floor(Math.random() * 16777215).toString(16)
+                : "",
+          }}
+          onClick={() => {
+            setSelectedTaste(item);
+            setTimeout(() => {
+              setChooseType(chooseType + 1);
+              setSelectedTaste(undefined);
+            }, 2000);
+          }}
+        >
+          {types[chooseType] == "taste" && (
+            <div
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: item == "Bitter" || item == "Umami" ? "auto" : "100%",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {getVectorSvg(
+                item,
+                selectedTaste == item
+                  ? "#" + Math.floor(Math.random() * 16777215).toString(16)
+                  : "none"
+              )}
+            </div>
+          )}
+          <span style={{ position: "relative" }}>{item}</span>
+        </td>
+      );
+    }
     function GetTable() {
       if (chooseType > types.length - 1) {
         setChooseType(undefined);
-        setIsSelected(true);
         setSelectedItem(0);
       }
       switch (types[chooseType]) {
@@ -286,19 +326,7 @@ function Menu() {
           );
       }
     }
-    function Cell(item, span) {
-      return (
-        <td
-          rowSpan={span?.rowSpan}
-          colSpan={span?.colSpan}
-          style={{ fontWeight: "inherit" }}
-          onClick={() => setChooseType(chooseType + 1)}
-        >
-          {" "}
-          {item}
-        </td>
-      );
-    }
+
     return (
       <div
         style={{
@@ -410,7 +438,7 @@ function Menu() {
         overflowY: "scroll",
       }}
     >
-      {isSelected ? (
+      {selectedItem != undefined ? (
         SelectedItem()
       ) : chooseType != undefined ? (
         ChooseYourOwn()
@@ -420,6 +448,7 @@ function Menu() {
           {GetMenuItems()}
         </>
       )}
+
       {GetFooter()}
     </div>
   );
@@ -615,3 +644,64 @@ const menuItems = {
     ],
   },
 };
+
+function getVectorSvg(type, fill) {
+  let svgPath = {};
+  let size = "100%";
+  switch (type) {
+    case "Sweet":
+      svgPath = (
+        <path
+          d="M170.5 88C170.5 136.339 132.431 175.5 85.5 175.5C38.5693 175.5 0.5 136.339 0.5 88C0.5 39.6614 38.5693 0.5 85.5 0.5C132.431 0.5 170.5 39.6614 170.5 88Z"
+          stroke="black"
+        />
+      );
+      break;
+    case "Salty":
+      svgPath = (
+        <rect
+          width="122"
+          height="121.975"
+          transform="matrix(0.697963 -0.716133 0.697963 0.716133 0.210811 88.0977)"
+          stroke="black"
+        />
+      );
+      break;
+    case "Bitter":
+      svgPath = <rect width="100%" height="100%" stroke="black" />;
+      size = "80%";
+
+      break;
+    case "Spicy":
+      svgPath = <path d="M2 88L173 0.999993L173 175L2 88Z" stroke="black" />;
+      break;
+    case "Umami":
+      svgPath = (
+        <path
+          d="M142.553 95.561C146.276 102.583 147.717 110.644 146.665 118.567C145.614 126.489 142.126 133.86 136.71 139.601C131.294 145.343 124.234 149.155 116.56 150.481C108.887 151.807 101.002 150.578 94.0562 146.972C92.8819 146.187 91.6634 145.473 90.4071 144.835C85.1936 142.125 79.4232 140.742 73.5811 140.8C67.739 140.859 61.9961 142.359 56.8351 145.172C56.0323 145.585 55.2295 146.072 54.4632 146.56C49.244 149.433 43.4159 150.94 37.4948 150.947C31.1705 150.948 24.9546 149.259 19.4566 146.048C13.9586 142.836 9.36736 138.21 6.13303 132.626C2.89869 127.041 1.13233 120.688 1.00715 114.19C0.881971 107.693 2.40227 101.273 5.41897 95.561C5.81509 95.0153 6.16892 94.4386 6.47722 93.836C9.35059 88.3379 10.8432 82.1897 10.8197 75.9489C10.8432 69.7081 9.35059 63.56 6.47722 58.0618C6.18529 57.4993 5.85687 56.8993 5.49195 56.3369C1.75576 49.2372 0.348454 41.0881 1.47917 33.1009C2.60988 25.1136 6.21826 17.7144 11.7681 12.0029C17.3179 6.29136 24.5129 2.57239 32.2838 1.39866C40.0547 0.224928 47.9867 1.65908 54.9011 5.48798C55.4485 5.86297 56.0323 6.20047 56.5797 6.50046C61.9234 9.47928 67.9067 11.039 73.986 11.0379C80.0591 11.062 86.042 9.52819 91.3924 6.57546C91.9397 6.27547 92.5236 5.93797 93.071 5.56298C99.9798 1.7236 107.91 0.277413 115.682 1.43936C123.455 2.6013 130.655 6.30935 136.213 12.0124C141.771 17.7155 145.39 25.1093 146.532 33.0948C147.675 41.0804 146.279 49.2315 142.553 56.3369C142.188 56.8993 141.86 57.4993 141.568 58.0618C138.668 63.5528 137.149 69.7014 137.149 75.9489C137.149 82.1965 138.668 88.345 141.568 93.836C141.853 94.4361 142.182 95.0128 142.553 95.561Z"
+          stroke="black"
+        />
+      );
+      break;
+    case "Sour":
+      svgPath = (
+        <path
+          d="M86 2L109.759 63.6755L170 88L109.759 112.324L86 174L62.2412 112.324L2 88L62.2412 63.6755L86 2Z"
+          stroke="black"
+        />
+      );
+      break;
+  }
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 176 176"
+      preserveAspectRatio="none"
+      fill={fill ?? "none"}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {svgPath}
+    </svg>
+  );
+}

@@ -1,9 +1,11 @@
 td {
   text-align: center;
   font-size: 22px;
-  font-weight: 400;
+  font-weight: inherit;
   width: 2000px;
+  height: auto;
   border: 1px solid black;
+  position: relative;
 }
 th {
   border: 1px solid black;
