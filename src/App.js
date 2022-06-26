@@ -1,7 +1,7 @@
-import { React, useState, useEffect, createRef } from "react";
+import { React, useState, useEffect, cf } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+import "./App.css";
 import gif1 from "./assets/gif1.gif";
 import gif2 from "./assets/gif2.gif";
 import gif3 from "./assets/gif3.gif";
@@ -9,6 +9,7 @@ import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
 import plus from "./assets/plus.svg";
 import arrowLeft from "./assets/arrowLeft.svg";
+import { func } from "prop-types";
 
 export default function BasicExample() {
   return (
@@ -32,6 +33,7 @@ function Menu() {
   const [isDay, setIsDay] = useState(true);
   const [isSelected, setIsSelected] = useState(false);
   const [selectedItem, setSelectedItem] = useState(undefined);
+  const [chooseType, setChooseType] = useState(undefined);
   const selectedMenu = menuItems[isDay ? "day" : "night"];
 
   function MenuItem(item, index) {
@@ -119,43 +121,50 @@ function Menu() {
 
   function GetFooter() {
     return (
-      <div
-        style={{
-          display: "flex",
-          width: "-webkit-fill-available",
-          position: "absolute",
-          padding: "23px 19px",
-          bottom: 0,
-          backgroundColor: isDay ? "white" : "black",
-          justifyContent: !isSelected ? "space-between" : "center",
-          borderTop: `1px solid  ${isDay ? "black" : "white"}`,
-        }}
-        onClick={() => {
-          setSelectedItem(undefined);
-          setIsSelected(false);
-        }}
-      >
-        {isSelected ? (
-          <img
-            src={arrowLeft}
-            width="5"
-            height="auto"
-            style={{ marginRight: "13px" }}
-          />
-        ) : undefined}
-        <span
+      chooseType == undefined && (
+        <div
           style={{
-            fontSize: "18px",
-            fontWeight: "400",
-            letterSpacing: "0.02em",
+            display: "flex",
+            width: "-webkit-fill-available",
+            position: "absolute",
+            padding: "23px 19px",
+            bottom: 0,
+            backgroundColor: isDay ? "white" : "black",
+            justifyContent: !isSelected ? "space-between" : "center",
+            borderTop: `1px solid  ${isDay ? "black" : "white"}`,
+            cursor: "pointer",
           }}
+          onClick={
+            isSelected
+              ? () => {
+                  setSelectedItem(undefined);
+                  setIsSelected(false);
+                }
+              : () => setChooseType(0)
+          }
         >
-          {isSelected ? "Your next desire" : "Create your own desire"}
-        </span>
-        {!isSelected ? (
-          <img src={plus} width="19px" height="auto" />
-        ) : undefined}
-      </div>
+          {isSelected ? (
+            <img
+              src={arrowLeft}
+              width="5"
+              height="auto"
+              style={{ marginRight: "13px" }}
+            />
+          ) : undefined}
+          <span
+            style={{
+              fontSize: "18px",
+              fontWeight: "400",
+              letterSpacing: "0.02em",
+            }}
+          >
+            {isSelected ? "Your next desire" : "Create your own desire"}
+          </span>
+          {!isSelected ? (
+            <img src={plus} width="19px" height="auto" />
+          ) : undefined}
+        </div>
+      )
     );
   }
 
@@ -183,6 +192,131 @@ function Menu() {
           {selectedMenu.headline}
         </div>
         {selectedMenu.items.map((item, index) => MenuItem(item, index))}
+        <div style={{ height: "70px" }}></div>
+      </div>
+    );
+  }
+
+  function ChooseYourOwn() {
+    function GetTable() {
+      if (chooseType > types.length - 1) {
+        setChooseType(undefined);
+        setIsSelected(true);
+        setSelectedItem(0);
+      }
+      switch (types[chooseType]) {
+        case "desire":
+          return (
+            <tbody>
+              <tr>
+                {Cell("Surprising")}
+                {Cell("Stimulating")}
+              </tr>
+              <tr>
+                {Cell("Emotional")}
+                {Cell("Refreshing")}
+              </tr>
+              <tr>
+                {Cell("Snacking")}
+                {Cell("Relaxing")}
+              </tr>
+              <tr>
+                {Cell("Comforting")}
+                {Cell("Junk food")}
+              </tr>
+            </tbody>
+          );
+        case "taste":
+          return (
+            <tbody>
+              <tr>
+                {Cell("Sweet")}
+                {Cell("Salty")}
+              </tr>
+              <tr>
+                {Cell("Bitter")}
+                {Cell("Spicy")}
+              </tr>
+              <tr>
+                {Cell("Umami")}
+                {Cell("Sour")}
+              </tr>
+            </tbody>
+          );
+        case "texture":
+          return (
+            <tbody>
+              <tr>
+                {Cell("Liquid")}
+                {Cell("Juicy")}
+                {Cell("Soft")}
+              </tr>
+              <tr>
+                {Cell("Doughy")}
+                {Cell("Gummy")}
+                {Cell("Dense")}
+              </tr>
+              <tr>
+                {Cell("Dry")}
+                {Cell("Cruncy")}
+                {Cell("Hard")}
+              </tr>
+            </tbody>
+          );
+        case "temperature":
+          return (
+            <tbody>
+              <tr style={{ fontWeight: 700 }}>{Cell("Hot")}</tr>
+              <tr style={{ fontWeight: 600 }}>{Cell("Warm")}</tr>
+              <tr style={{ fontWeight: 400 }}>{Cell("Lukewarm")}</tr>
+              <tr style={{ fontWeight: 400 }}>{Cell("Cold")}</tr>
+              <tr style={{ fontWeight: 300 }}>{Cell("Freezing")}</tr>
+            </tbody>
+          );
+        case "size":
+          return (
+            <tbody>
+              <tr height={"50%"}>{Cell("Meal", { colSpan: 3 })}</tr>
+              <tr>
+                {Cell("Appetizer")}
+                {Cell("Lightmeal", { rowSpan: 2 })}
+              </tr>
+              <tr height="20%">{Cell("Bite")}</tr>
+            </tbody>
+          );
+      }
+    }
+    function Cell(item, span) {
+      return (
+        <td
+          rowSpan={span?.rowSpan}
+          colSpan={span?.colSpan}
+          style={{ fontWeight: "inherit" }}
+          onClick={() => setChooseType(chooseType + 1)}
+        >
+          {" "}
+          {item}
+        </td>
+      );
+    }
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          margin: "20px",
+        }}
+      >
+        <span
+          style={{
+            fontWeight: "400",
+            fontSize: "28px",
+            margin: "100px 0 50px 0",
+          }}
+        >
+          Choose your {types[chooseType]}
+        </span>
+        <table style={{ width: "-webkit-fill-available" }}>{GetTable()}</table>
       </div>
     );
   }
@@ -276,13 +410,15 @@ function Menu() {
         overflowY: "scroll",
       }}
     >
-      {!isSelected ? (
+      {isSelected ? (
+        SelectedItem()
+      ) : chooseType != undefined ? (
+        ChooseYourOwn()
+      ) : (
         <>
           {SelectDayNight()}
           {GetMenuItems()}
         </>
-      ) : (
-        SelectedItem()
       )}
       {GetFooter()}
     </div>
@@ -322,7 +458,7 @@ function Screen() {
     </div>
   );
 }
-
+const types = ["desire", "taste", "texture", "temperature", "size"];
 const menuItems = {
   day: {
     headline: "Your daily dose of desire has arrived.",
