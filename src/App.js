@@ -1,4 +1,4 @@
-import { React, useState, useEffect, state } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
@@ -8,6 +8,17 @@ import gif3 from "./assets/gif3.gif";
 import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
 import plus from "./assets/plus.svg";
+import crunchyVector from "./assets/Crunchy.svg";
+import denseVector from "./assets/Dense.svg";
+import doughyVector from "./assets/Doughy.svg";
+import dryVector from "./assets/Dry.svg";
+import gummyVector from "./assets/Gummy.svg";
+import hardVector from "./assets/Hard.svg";
+import juicyVector from "./assets/Juicy.svg";
+import liquidVector from "./assets/Liquid.svg";
+import softVector from "./assets/Soft.svg";
+import spagetti from "./assets/spagetti2.mp4";
+import waiting from "./assets/waiting.mp4";
 import arrowLeft from "./assets/arrowLeft.svg";
 
 export default function BasicExample() {
@@ -132,6 +143,7 @@ function Menu() {
             justifyContent: !isSelected ? "space-between" : "center",
             borderTop: `1px solid  ${isDay ? "black" : "white"}`,
             cursor: "pointer",
+            alignItems: "center",
           }}
           onClick={
             isSelected
@@ -144,9 +156,7 @@ function Menu() {
           {isSelected ? (
             <img
               src={arrowLeft}
-              width="5"
-              height="auto"
-              style={{ marginRight: "13px" }}
+              style={{ height: "16px", width: "8px", marginRight: "13px" }}
             />
           ) : undefined}
           <span
@@ -163,6 +173,33 @@ function Menu() {
           ) : undefined}
         </div>
       )
+    );
+  }
+
+  function GetHeader() {
+    return (
+      <div
+        style={{
+          display: "flex",
+          width: "-webkit-fill-available",
+          position: "absolute",
+          padding: "23px 19px",
+          top: 0,
+          backgroundColor: isDay ? "white" : "black",
+          justifyContent: "space-between",
+          borderTop: `1px solid  ${isDay ? "black" : "white"}`,
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={arrowLeft}
+          style={{ marginRight: "13px", height: "16px", width: "8px" }}
+          onClick={() =>
+            setChooseType(chooseType == 0 ? undefined : chooseType - 1)
+          }
+        />
+        {GetDots(chooseType)}
+      </div>
     );
   }
 
@@ -220,8 +257,8 @@ function Menu() {
             <div
               style={{
                 position: "absolute",
-                width: "100%",
-                height: item == "Bitter" || item == "Umami" ? "auto" : "100%",
+                width: item == "Bitter" || item == "Umami" ? "80%" : "100%",
+                height: item == "Bitter" || item == "Umami" ? "80%" : "100%",
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
@@ -234,6 +271,17 @@ function Menu() {
                   : "none"
               )}
             </div>
+          )}
+          {types[chooseType] == "texture" && (
+            <img
+              src={getTexture(item)}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+              }}
+            />
           )}
           <span style={{ position: "relative" }}>{item}</span>
         </td>
@@ -298,7 +346,7 @@ function Menu() {
               </tr>
               <tr>
                 {Cell("Dry")}
-                {Cell("Cruncy")}
+                {Cell("Crunchy")}
                 {Cell("Hard")}
               </tr>
             </tbody>
@@ -387,7 +435,7 @@ function Menu() {
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
-            padding: "120px 0 45px 20px",
+            padding: "100px 0 45px 20px",
             display: "flex",
             flexDirection: "column",
             borderBottom: "1px solid black",
@@ -441,49 +489,73 @@ function Menu() {
       {selectedItem != undefined ? (
         SelectedItem()
       ) : chooseType != undefined ? (
-        ChooseYourOwn()
+        <>
+          {ChooseYourOwn()}
+          {GetHeader()}
+        </>
       ) : (
         <>
           {SelectDayNight()}
           {GetMenuItems()}
         </>
       )}
-
       {GetFooter()}
     </div>
   );
 }
 
 function Screen() {
-  const [num, setNum] = useState(1);
+  const [num, setNum] = useState(-1);
+  const vidRef = useRef(null);
 
   useEffect(() => {
-    const id = setInterval(myfunc, 200);
+    const id = setInterval((num) => myfunc(num), 2000);
     return () => clearInterval(id);
-  }, []);
+  }, [num]);
 
   const myfunc = async () => {
     await axios.get("/selectedImage").then((res) => {
-      setNum(res.data.id);
+      vidRef?.current?.play();
+      if (res.data.id != num) {
+        setNum(res.data.id);
+      }
     });
   };
 
-  const getGif = (num) => {
+  const getVideo = () => {
     switch (num) {
+      case 0:
+        return spagetti;
       case 1:
-        return gif1;
+        return spagetti;
       case 2:
-        return gif2;
+        return spagetti;
       case 3:
-        return gif3;
+        return spagetti;
       case 4:
-        return gif4;
+        return spagetti;
+      case 5:
+        return spagetti;
+      case 6:
+        return spagetti;
+      case 7:
+        return spagetti;
+      default:
+        return waiting;
     }
   };
-
   return (
-    <div style={{ height: "100vh", width: "100%", textAlign: "center" }}>
-      <img src={getGif(num)} alt="" width="100%" height="auto" />
+    <div style={{ height: "100vh", width: "100v", overflow: "hidden" }}>
+      <video
+        key={num}
+        style={{ objectFit: "fill", width: "100%", height: "100%" }}
+        ref={vidRef}
+        onEnded={
+          num != -1 ? () => axios.post(`/selectedImage`, { id: -1 }) : undefined
+        }
+      >
+        <source src={getVideo()} type="video/mp4" />
+      </video>
     </div>
   );
 }
@@ -647,7 +719,7 @@ const menuItems = {
 
 function getVectorSvg(type, fill) {
   let svgPath = {};
-  let size = "100%";
+  let vBox = "0 0 171 176";
   switch (type) {
     case "Sweet":
       svgPath = (
@@ -668,9 +740,10 @@ function getVectorSvg(type, fill) {
       );
       break;
     case "Bitter":
-      svgPath = <rect width="100%" height="100%" stroke="black" />;
-      size = "80%";
-
+      svgPath = (
+        <rect x="0.5" y="0.5" width="121" height="123" stroke="black" />
+      );
+      vBox = "0 0 122 124";
       break;
     case "Spicy":
       svgPath = <path d="M2 88L173 0.999993L173 175L2 88Z" stroke="black" />;
@@ -682,6 +755,7 @@ function getVectorSvg(type, fill) {
           stroke="black"
         />
       );
+      vBox = "0 0 148 152";
       break;
     case "Sour":
       svgPath = (
@@ -690,18 +764,92 @@ function getVectorSvg(type, fill) {
           stroke="black"
         />
       );
+      vBox = "0 0 172 176";
       break;
   }
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 176 176"
+      width={"100%"}
+      height={"100%"}
+      viewBox={vBox}
       preserveAspectRatio="none"
       fill={fill ?? "none"}
       xmlns="http://www.w3.org/2000/svg"
     >
       {svgPath}
+    </svg>
+  );
+}
+
+function getTexture(type) {
+  switch (type) {
+    case "Crunchy":
+      return crunchyVector;
+    case "Dense":
+      return denseVector;
+    case "Doughy":
+      return doughyVector;
+    case "Dry":
+      return dryVector;
+    case "Gummy":
+      return gummyVector;
+    case "Hard":
+      return hardVector;
+    case "Juicy":
+      return juicyVector;
+    case "Liquid":
+      return liquidVector;
+    case "Soft":
+      return softVector;
+    default:
+      return softVector;
+  }
+}
+
+function GetDots(index) {
+  return (
+    <svg
+      width="86"
+      height="8"
+      viewBox="0 0 86 8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="3.30769"
+        cy="4.00008"
+        r="3.30769"
+        fill="black"
+        fill-opacity={index == 0 ? 1 : 0.3}
+      />
+      <circle
+        cx="23.1538"
+        cy="4.00008"
+        r="3.30769"
+        fill="black"
+        fill-opacity={index == 1 ? 1 : 0.3}
+      />
+      <circle
+        cx="43"
+        cy="4.00008"
+        r="3.30769"
+        fill="black"
+        fill-opacity={index == 2 ? 1 : 0.3}
+      />
+      <circle
+        cx="62.8462"
+        cy="4.00008"
+        r="3.30769"
+        fill="black"
+        fill-opacity={index == 3 ? 1 : 0.3}
+      />
+      <circle
+        cx="82.6923"
+        cy="4.00008"
+        r="3.30769"
+        fill="black"
+        fill-opacity={index == 4 ? 1 : 0.3}
+      />
     </svg>
   );
 }
