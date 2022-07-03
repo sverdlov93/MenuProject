@@ -572,6 +572,7 @@ const menuItems = {
         texture: "juicy",
         temp: "lukewarm",
         size: "light meal",
+        color: "#90D2DA",
       },
       {
         name: "Hit refresh",
@@ -581,6 +582,7 @@ const menuItems = {
         texture: "dense",
         temp: "cold",
         size: "light meal",
+        color: "#B4EFD5",
       },
       {
         name: "Wake me up",
@@ -590,6 +592,7 @@ const menuItems = {
         texture: "liquid",
         temp: "hot",
         size: "light meal",
+        color: "#FF6434",
       },
       {
         name: "Chasing thrills",
@@ -599,6 +602,7 @@ const menuItems = {
         texture: "dry",
         temp: "hot",
         size: "meal",
+        color: "#AC8AEE",
       },
       {
         name: "Junk urges",
@@ -608,6 +612,7 @@ const menuItems = {
         texture: "gummy",
         temp: "lukewarm",
         size: "meal",
+        color: "#FF6434",
       },
       {
         name: "Warm my heart",
@@ -617,6 +622,7 @@ const menuItems = {
         texture: "soft",
         temp: "warm",
         size: "appetizer",
+        color: "#E5C892",
       },
       {
         name: "Feel the love",
@@ -626,6 +632,7 @@ const menuItems = {
         texture: "doughy",
         temp: "warm",
         size: "meal",
+        color: "#E4D2FF",
       },
       {
         name: "Looking for a snack",
@@ -635,6 +642,7 @@ const menuItems = {
         texture: "crunchy",
         temp: "lukewarm",
         size: "appetizer",
+        color: "#A06E29",
       },
     ],
   },
@@ -649,6 +657,7 @@ const menuItems = {
         texture: "gummy",
         temp: "lukewarm",
         size: "meal",
+        color: "#FF6434",
       },
       {
         name: "Warm my heart",
@@ -658,6 +667,7 @@ const menuItems = {
         texture: "soft",
         temp: "warm",
         size: "appetizer",
+        color: "#E5C892",
       },
       {
         name: "Chasing thrills",
@@ -667,6 +677,7 @@ const menuItems = {
         texture: "juicy",
         temp: "freezing",
         size: "bite",
+        color: "#AC8AEE",
       },
       {
         name: "Looking for a snack",
@@ -676,6 +687,7 @@ const menuItems = {
         texture: "dry",
         temp: "hot",
         size: "bite",
+        color: "#A06E29",
       },
       {
         name: "Take a breath",
@@ -685,6 +697,7 @@ const menuItems = {
         texture: "liquid",
         temp: "hot",
         size: "light meal",
+        color: "#90D2DA",
       },
       {
         name: "Need a hug",
@@ -694,6 +707,7 @@ const menuItems = {
         texture: "hard",
         temp: "cold",
         size: "appetizer",
+        color: "#E5C892",
       },
       {
         name: "Feel the love",
@@ -703,6 +717,7 @@ const menuItems = {
         texture: "doughy",
         temp: "warm",
         size: "appetizer",
+        color: "#E4D2FF",
       },
       {
         name: "Get my satisfaction",
@@ -712,6 +727,7 @@ const menuItems = {
         texture: "soft",
         temp: "freezing",
         size: "appetizer",
+        color: "#FF6434",
       },
     ],
   },
