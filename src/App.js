@@ -76,7 +76,7 @@ function Menu() {
           padding: "35px 35px 28px 20px",
         }}
         onClick={(e) => {
-          e.currentTarget.style.backgroundColor = "#90D2DA";
+          e.currentTarget.style.backgroundColor = item.color;
           setTimeout(() => {
             axios.post(`/selectedImage`, { id: isDay ? index : index + 10 });
             setSelectedItem(index);
