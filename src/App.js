@@ -2,10 +2,6 @@ import { React, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import gif1 from "./assets/gif1.gif";
-import gif2 from "./assets/gif2.gif";
-import gif3 from "./assets/gif3.gif";
-import gif4 from "./assets/gif4.gif";
 import arrow from "./assets/arrow.svg";
 import plus from "./assets/plus.svg";
 import crunchyVector from "./assets/Crunchy.svg";
@@ -166,6 +162,7 @@ function Menu() {
             isSelected
               ? () => {
                   setSelectedItem(undefined);
+                  axios.post(`/selectedImage`, { id: -1 });
                 }
               : () => setChooseType(0)
           }
@@ -257,10 +254,7 @@ function Menu() {
           rowSpan={span?.rowSpan}
           colSpan={span?.colSpan}
           style={{
-            backgroundColor:
-              selectedTaste == item
-                ? "#" + Math.floor(Math.random() * 16777215).toString(16)
-                : "",
+            backgroundColor: selectedTaste == item ? color[item] : "",
           }}
           onClick={() => {
             setSelectedTaste(item);
@@ -283,9 +277,7 @@ function Menu() {
             >
               {getVectorSvg(
                 item,
-                selectedTaste == item
-                  ? "#" + Math.floor(Math.random() * 16777215).toString(16)
-                  : "none"
+                selectedTaste == item ? color[`${item}2`] : "none"
               )}
             </div>
           )}
