@@ -17,8 +17,25 @@ import hardVector from "./assets/Hard.svg";
 import juicyVector from "./assets/Juicy.svg";
 import liquidVector from "./assets/Liquid.svg";
 import softVector from "./assets/Soft.svg";
-import spagetti from "./assets/spagetti2.mp4";
-import waiting from "./assets/waiting.mp4";
+
+import waiting from "./assets/videos/waiting.mp4";
+import Day1 from "./assets/videos/Day1.mp4";
+import Day2 from "./assets/videos/Day2.mp4";
+import Day3 from "./assets/videos/Day3.mp4";
+import Day4 from "./assets/videos/Day4.mp4";
+import Day5 from "./assets/videos/Day5.mp4";
+import Day6 from "./assets/videos/Day6.mp4";
+import Day7 from "./assets/videos/Day7.mp4";
+import Day8 from "./assets/videos/Day8.mp4";
+import Night1 from "./assets/videos/Night1.mp4";
+import Night2 from "./assets/videos/Night2.mp4";
+import Night3 from "./assets/videos/Night3.mp4";
+import Night4 from "./assets/videos/Night4.mp4";
+import Night5 from "./assets/videos/Night5.mp4";
+import Night6 from "./assets/videos/Night6.mp4";
+import Night7 from "./assets/videos/Night7.mp4";
+import Night8 from "./assets/videos/Night8.mp4";
+
 import arrowLeft from "./assets/arrowLeft.svg";
 
 export default function BasicExample() {
@@ -65,7 +82,7 @@ function Menu() {
         onClick={(e) => {
           e.currentTarget.style.backgroundColor = "#90D2DA";
           setTimeout(() => {
-            axios.post(`/selectedImage`, { id: index });
+            axios.post(`/selectedImage`, { id: isDay ? index : index + 10 });
             setSelectedItem(index);
           }, 2000);
         }}
@@ -525,21 +542,37 @@ function Screen() {
   const getVideo = () => {
     switch (num) {
       case 0:
-        return spagetti;
+        return Day1;
       case 1:
-        return spagetti;
+        return Day2;
       case 2:
-        return spagetti;
+        return Day3;
       case 3:
-        return spagetti;
+        return Day4;
       case 4:
-        return spagetti;
+        return Day5;
       case 5:
-        return spagetti;
+        return Day6;
       case 6:
-        return spagetti;
+        return Day7;
       case 7:
-        return spagetti;
+        return Day8;
+      case 10:
+        return Night1;
+      case 11:
+        return Night2;
+      case 12:
+        return Night3;
+      case 13:
+        return Night4;
+      case 14:
+        return Night5;
+      case 15:
+        return Night6;
+      case 16:
+        return Night7;
+      case 17:
+        return Night8;
       default:
         return waiting;
     }
