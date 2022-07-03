@@ -18,4 +18,5 @@ table {
   height: calc(100vh - 250px);
   border-style: hidden; /* hide standard table (collapsed) border */
   box-shadow: 0 0 0 1px black; /* this draws the table border  */
+  overflow: hidden;
 }

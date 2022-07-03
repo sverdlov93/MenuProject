@@ -259,8 +259,8 @@ function Menu() {
           onClick={() => {
             setSelectedTaste(item);
             setTimeout(() => {
-              setChooseType(chooseType + 1);
-              setSelectedTaste(undefined);
+              //  setChooseType(chooseType + 1);
+              //  setSelectedTaste(undefined);
             }, 2000);
           }}
         >
