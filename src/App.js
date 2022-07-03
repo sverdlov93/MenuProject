@@ -853,3 +853,57 @@ function GetDots(index) {
     </svg>
   );
 }
+
+const color = {
+  Surprising: "#AC8AEE",
+  Stimulating: "#FF6434",
+  Emotional: "#E4D2FF",
+  Refreshing: "#B4EFD5",
+  Snacking: "#A06E29",
+  Relaxing: "#90D2DA",
+  Comforting: "#E5C892",
+  "Junk food": "#FF6434",
+
+  Sweet: "#FF6434",
+  Sweet2: "#FEA6AB",
+  Salty: "#B4EFD5",
+  Salty2: "#90D2DA",
+  Bitter: "#A06E29",
+  Bitter2: "#E5C892",
+  Spicy: "#FEA6AB",
+  Spicy2: "#FF6434",
+  Umami: "#E5C892",
+  Umami2: "#A06E29",
+  Sour: "#AC8AEE",
+  Sour2: "#E4D2FF",
+
+  Liquid: "#90D2DA",
+  Liquid2: "#51ADBA",
+  Juicy: "#B4EFD5",
+  Juicy2: "#7FE0B2",
+  Soft: "#FEA6AB",
+  Soft2: "#FD6C73",
+  Doughy: "#E5C892",
+  Doughy2: "#CBA66D",
+  Gummy: "#E4D2FF",
+  Gummy2: "#CCADFF",
+  Dense: "#AC8AEE",
+  Dense2: "#906AE6",
+  Dry: "#A06E29",
+  Dry2: "#88551B",
+  Crunchy: "#FF6434",
+  Crunchy2: "#CA390C",
+  Hard: "#A06E29",
+  Hard2: "#88551B",
+
+  Hot: "#FF6434",
+  Warm: "#FEA6AB",
+  Lukewarm: "#E5C892",
+  Cold: "#B4EFD5",
+  Freezing: "#90D2DA",
+
+  Meal: "#FEA6AB",
+  Lightmeal: "#E5C892",
+  Appetizer: "#FF6434",
+  Bite: "#AC8AEE",
+};
