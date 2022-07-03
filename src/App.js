@@ -80,7 +80,7 @@ function Menu() {
           setTimeout(() => {
             axios.post(`/selectedImage`, { id: isDay ? index : index + 10 });
             setSelectedItem(index);
-          }, 2000);
+          }, 1000);
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -261,7 +261,7 @@ function Menu() {
             setTimeout(() => {
               setChooseType(chooseType + 1);
               setSelectedTaste(undefined);
-            }, 2000);
+            }, 1000);
           }}
         >
           {types[chooseType] == "taste" && (
@@ -518,7 +518,7 @@ function Screen() {
   const vidRef = useRef(null);
 
   useEffect(() => {
-    const id = setInterval((num) => myfunc(num), 2000);
+    const id = setInterval((num) => myfunc(num), 1000);
     return () => clearInterval(id);
   }, [num]);
 
