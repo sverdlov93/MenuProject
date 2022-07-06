@@ -412,7 +412,7 @@ function Menu() {
         <span
           style={{
             fontWeight: "400",
-            fontSize: "26px",
+            fontSize: "28px",
             letterSpacing: "-0.3",
             marginTop: "150px",
           }}
