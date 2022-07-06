@@ -63,6 +63,15 @@ function Menu() {
   const [selectedTaste, setSelectedTaste] = useState(undefined);
   const selectedMenu = menuItems[isDay ? "day" : "night"];
 
+  function timeout() {
+    setTimeout(function () {
+      // Do Something Here
+      // Then recall the parent function to
+      // create a recursive loop.
+      timeout();
+    }, 1000);
+  }
+
   function MenuItem(item, index) {
     return (
       <div
@@ -84,6 +93,17 @@ function Menu() {
           setTimeout(() => {
             axios.post(`/selectedImage`, { id: isDay ? index : index + 10 });
             setSelectedItem(index);
+
+            const interval = () =>
+              setInterval(async () => {
+                await axios.get("/selectedImage").then((res) => {
+                  if (res.data.id == -1) {
+                    clearInterval(interval);
+                    setSelectedItem(undefined);
+                  }
+                });
+              }, 5000);
+            interval();
           }, 1000);
         }}
       >
@@ -401,7 +421,7 @@ function Menu() {
         <span
           style={{
             fontWeight: "400",
-            fontSize: "27px",
+            fontSize: "26px",
             letterSpacing: "-0.3",
             margin: "100px 0 50px 0",
           }}
