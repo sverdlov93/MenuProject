@@ -63,15 +63,6 @@ function Menu() {
   const [selectedTaste, setSelectedTaste] = useState(undefined);
   const selectedMenu = menuItems[isDay ? "day" : "night"];
 
-  function timeout() {
-    setTimeout(function () {
-      // Do Something Here
-      // Then recall the parent function to
-      // create a recursive loop.
-      timeout();
-    }, 1000);
-  }
-
   function MenuItem(item, index) {
     return (
       <div
@@ -94,16 +85,14 @@ function Menu() {
             axios.post(`/selectedImage`, { id: isDay ? index : index + 10 });
             setSelectedItem(index);
 
-            const interval = () =>
-              setInterval(async () => {
-                await axios.get("/selectedImage").then((res) => {
-                  if (res.data.id == -1) {
-                    clearInterval(interval);
-                    setSelectedItem(undefined);
-                  }
-                });
-              }, 5000);
-            interval();
+            const id = setInterval(async () => {
+              await axios.get("/selectedImage").then((res) => {
+                if (res.data.id == -1) {
+                  clearInterval(id);
+                  setSelectedItem(undefined);
+                }
+              });
+            }, 5000);
           }, 1000);
         }}
       >
@@ -324,8 +313,8 @@ function Menu() {
     function GetTable() {
       if (chooseType > types.length - 1) {
         setChooseType(undefined);
-        setSelectedItem(7);
-        axios.post(`/selectedImage`, { id: 17 });
+        setSelectedItem(isDay ? 6 : 7);
+        axios.post(`/selectedImage`, { id: isDay ? 6 : 17 });
       }
       switch (types[chooseType]) {
         case "desire":
