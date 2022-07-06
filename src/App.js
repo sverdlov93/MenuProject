@@ -3,9 +3,15 @@ import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import arrow from "./assets/arrow.svg";
+import arrowLeft from "./assets/arrowLeft.svg";
+import arrowNight from "./assets/arrowNight.svg";
+import arrowLeftNight from "./assets/arrowLeftNight.svg";
+
 import plus from "./assets/plus.svg";
+import plusNight from "./assets/plusNight.svg";
+
 import crunchyVector from "./assets/Crunchy.svg";
-import denseVector from "./assets/Dense.svg";
+import denseVector from "./assets/Dense2.svg";
 import doughyVector from "./assets/Doughy.svg";
 import dryVector from "./assets/Dry.svg";
 import gummyVector from "./assets/Gummy.svg";
@@ -31,8 +37,6 @@ import Night5 from "./assets/videos/Night5.mp4";
 import Night6 from "./assets/videos/Night6.mp4";
 import Night7 from "./assets/videos/Night7.mp4";
 import Night8 from "./assets/videos/Night8.mp4";
-
-import arrowLeft from "./assets/arrowLeft.svg";
 
 export default function BasicExample() {
   return (
@@ -69,11 +73,11 @@ function Menu() {
             isDay ? "0,0,0" : "255,255,255"
           }, .3)`,
           height: "120px",
-          width: "90%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "35px 35px 28px 20px",
+          padding: "35px 20px 28px 20px",
+          width: "-webkit-fill-available",
         }}
         onClick={(e) => {
           e.currentTarget.style.backgroundColor = item.color;
@@ -93,7 +97,7 @@ function Menu() {
           >
             {item.name}
           </span>
-          <img src={arrow} width="32px" height="auto" />
+          <img src={isDay ? arrow : arrowNight} width="32px" height="auto" />
         </div>
         <span
           style={{
@@ -169,7 +173,7 @@ function Menu() {
         >
           {isSelected ? (
             <img
-              src={arrowLeft}
+              src={isDay ? arrowLeft : arrowLeftNight}
               style={{ height: "16px", width: "8px", marginRight: "13px" }}
             />
           ) : undefined}
@@ -183,7 +187,7 @@ function Menu() {
             {isSelected ? "Your next desire" : "Create your own desire"}
           </span>
           {!isSelected ? (
-            <img src={plus} width="19px" height="auto" />
+            <img src={isDay ? plus : plusNight} width="19px" height="auto" />
           ) : undefined}
         </div>
       )
@@ -201,12 +205,11 @@ function Menu() {
           top: 0,
           backgroundColor: isDay ? "white" : "black",
           justifyContent: "space-between",
-          borderTop: `1px solid  ${isDay ? "black" : "white"}`,
           alignItems: "center",
         }}
       >
         <img
-          src={arrowLeft}
+          src={isDay ? arrowLeft : arrowLeftNight}
           style={{ marginRight: "13px", height: "16px", width: "8px" }}
           onClick={() =>
             setChooseType(chooseType == 0 ? undefined : chooseType - 1)
@@ -255,6 +258,8 @@ function Menu() {
           colSpan={span?.colSpan}
           style={{
             backgroundColor: selectedTaste == item ? color[item] : "",
+            width: types[chooseType] == "texture" ? "115px" : "2000px",
+            border: `1px solid  ${isDay ? "black" : "white"}`,
           }}
           onClick={() => {
             setSelectedTaste(item);
@@ -299,7 +304,8 @@ function Menu() {
     function GetTable() {
       if (chooseType > types.length - 1) {
         setChooseType(undefined);
-        setSelectedItem(0);
+        setSelectedItem(7);
+        axios.post(`/selectedImage`, { id: 17 });
       }
       switch (types[chooseType]) {
         case "desire":
@@ -395,13 +401,21 @@ function Menu() {
         <span
           style={{
             fontWeight: "400",
-            fontSize: "28px",
+            fontSize: "27px",
+            letterSpacing: "-0.3",
             margin: "100px 0 50px 0",
           }}
         >
           Choose your {types[chooseType]}
         </span>
-        <table style={{ width: "-webkit-fill-available" }}>{GetTable()}</table>
+        <table
+          style={{
+            width: "-webkit-fill-available",
+            boxShadow: `0 0 0 1px ${isDay ? "black" : "white"}`,
+          }}
+        >
+          {GetTable()}
+        </table>
       </div>
     );
   }
@@ -847,7 +861,7 @@ function getTexture(type) {
   }
 }
 
-function GetDots(index) {
+function GetDots(index, isDay) {
   return (
     <svg
       width="86"
@@ -860,36 +874,36 @@ function GetDots(index) {
         cx="3.30769"
         cy="4.00008"
         r="3.30769"
-        fill="black"
-        fill-opacity={index == 0 ? 1 : 0.3}
+        fill={isDay ? "black" : "white"}
+        fillOpacity={index == 0 ? 1 : 0.3}
       />
       <circle
         cx="23.1538"
         cy="4.00008"
         r="3.30769"
-        fill="black"
-        fill-opacity={index == 1 ? 1 : 0.3}
+        fill={isDay ? "black" : "white"}
+        fillOpacity={index == 1 ? 1 : 0.3}
       />
       <circle
         cx="43"
         cy="4.00008"
         r="3.30769"
-        fill="black"
-        fill-opacity={index == 2 ? 1 : 0.3}
+        fill={isDay ? "black" : "white"}
+        fillOpacity={index == 2 ? 1 : 0.3}
       />
       <circle
         cx="62.8462"
         cy="4.00008"
         r="3.30769"
-        fill="black"
-        fill-opacity={index == 3 ? 1 : 0.3}
+        fill={isDay ? "black" : "white"}
+        fillOpacity={index == 3 ? 1 : 0.3}
       />
       <circle
         cx="82.6923"
         cy="4.00008"
         r="3.30769"
-        fill="black"
-        fill-opacity={index == 4 ? 1 : 0.3}
+        fill={isDay ? "black" : "white"}
+        fillOpacity={index == 4 ? 1 : 0.3}
       />
     </svg>
   );
