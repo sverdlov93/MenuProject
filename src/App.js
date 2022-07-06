@@ -76,7 +76,7 @@ function Menu() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "35px 20px 28px 20px",
+          padding: "35px 0 28px 0",
           width: "-webkit-fill-available",
         }}
         onClick={(e) => {
@@ -252,7 +252,9 @@ function Menu() {
         >
           {selectedMenu.headline}
         </div>
-        {selectedMenu.items.map((item, index) => MenuItem(item, index))}
+        <div style={{ padding: "0 20px" }}>
+          {selectedMenu.items.map((item, index) => MenuItem(item, index))}
+        </div>
         <div style={{ height: "70px" }}></div>
       </div>
     );
@@ -412,14 +414,13 @@ function Menu() {
             fontWeight: "400",
             fontSize: "26px",
             letterSpacing: "-0.3",
-            margin: "100px 0 50px 0",
+            marginTop: "150px",
           }}
         >
           Choose your {types[chooseType]}
         </span>
         <table
           style={{
-            width: "-webkit-fill-available",
             boxShadow: `0 0 0 1px ${isDay ? "black" : "white"}`,
           }}
         >
