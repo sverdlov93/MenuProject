@@ -4,19 +4,13 @@ td {
   font-weight: inherit;
   width: 2000px;
   height: auto;
-  border: 1px solid black;
   position: relative;
 }
-th {
-  border: 1px solid black;
-}
 table {
-  border: 1px solid black;
   border-collapse: collapse;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
-  height: calc(100vh - 250px);
+  height: 528px;
   border-style: hidden; /* hide standard table (collapsed) border */
-  box-shadow: 0 0 0 1px black; /* this draws the table border  */
   overflow: hidden;
 }
