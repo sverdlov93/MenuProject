@@ -414,7 +414,7 @@ function Menu() {
             fontWeight: "400",
             fontSize: "28px",
             letterSpacing: "-0.3",
-            marginTop: "150px",
+            marginTop: "145px",
           }}
         >
           Choose your {types[chooseType]}
