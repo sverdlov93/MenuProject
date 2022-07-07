@@ -66,6 +66,7 @@ function Menu() {
   function MenuItem(item, index) {
     return (
       <div
+        key={index}
         style={{ padding: "0 20px" }}
         onClick={(e) => {
           e.currentTarget.style.backgroundColor = item.color;
@@ -85,7 +86,7 @@ function Menu() {
         }}
       >
         <div
-          key={index}
+          key={index + 100}
           style={{
             cursor: "pointer",
             borderBottom: `1px solid rgba(${
