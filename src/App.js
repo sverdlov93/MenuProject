@@ -320,6 +320,15 @@ function Menu() {
         setChooseType(undefined);
         setSelectedItem(isDay ? 6 : 7);
         axios.post(`/selectedImage`, { id: isDay ? 6 : 17 });
+
+        const id = setInterval(async () => {
+          await axios.get("/selectedImage").then((res) => {
+            if (res.data.id == -1) {
+              clearInterval(id);
+              setSelectedItem(undefined);
+            }
+          });
+        }, 5000);
       }
       switch (types[chooseType]) {
         case "desire":
