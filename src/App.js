@@ -67,7 +67,7 @@ function Menu() {
     return (
       <div
         key={index}
-        style={{ padding: "0 20px" }}
+        style={{ padding: "0 20px", width: "-webkit-fill-available" }}
         onClick={(e) => {
           e.currentTarget.style.backgroundColor = item.color;
           setTimeout(() => {
