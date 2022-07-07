@@ -66,19 +66,7 @@ function Menu() {
   function MenuItem(item, index) {
     return (
       <div
-        key={index}
-        style={{
-          cursor: "pointer",
-          borderBottom: `1px solid rgba(${
-            isDay ? "0,0,0" : "255,255,255"
-          }, .3)`,
-          height: "120px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "35px 0 28px 0",
-          width: "-webkit-fill-available",
-        }}
+        style={{ padding: "0 20px" }}
         onClick={(e) => {
           e.currentTarget.style.backgroundColor = item.color;
           setTimeout(() => {
@@ -96,28 +84,44 @@ function Menu() {
           }, 1000);
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span
-            style={{
-              fontWeight: 400,
-              fontSize: "22px",
-              letterSpacing: "0.02em",
-            }}
-          >
-            {item.name}
-          </span>
-          <img src={isDay ? arrow : arrowNight} width="32px" height="auto" />
-        </div>
-        <span
+        <div
+          key={index}
           style={{
-            width: "65%",
-            fontWeight: 300,
-            fontSize: "16px",
-            letterSpacing: "0.03em",
+            cursor: "pointer",
+            borderBottom: `1px solid rgba(${
+              isDay ? "0,0,0" : "255,255,255"
+            }, .3)`,
+            height: "120px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "35px 0 28px 0",
+            width: "-webkit-fill-available",
           }}
         >
-          {item.summery}
-        </span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span
+              style={{
+                fontWeight: 400,
+                fontSize: "22px",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {item.name}
+            </span>
+            <img src={isDay ? arrow : arrowNight} width="32px" height="auto" />
+          </div>
+          <span
+            style={{
+              width: "65%",
+              fontWeight: 300,
+              fontSize: "16px",
+              letterSpacing: "0.03em",
+            }}
+          >
+            {item.summery}
+          </span>
+        </div>
       </div>
     );
   }
@@ -252,9 +256,7 @@ function Menu() {
         >
           {selectedMenu.headline}
         </div>
-        <div style={{ padding: "0 20px" }}>
-          {selectedMenu.items.map((item, index) => MenuItem(item, index))}
-        </div>
+        {selectedMenu.items.map((item, index) => MenuItem(item, index))}
         <div style={{ height: "70px" }}></div>
       </div>
     );
@@ -414,7 +416,7 @@ function Menu() {
             fontWeight: "400",
             fontSize: "28px",
             letterSpacing: "-0.3",
-            marginTop: "145px",
+            marginTop: "100px",
           }}
         >
           Choose your {types[chooseType]}
