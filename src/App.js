@@ -228,7 +228,7 @@ function Menu() {
             setChooseType(chooseType == 0 ? undefined : chooseType - 1)
           }
         />
-        {GetDots(chooseType)}
+        {GetDots(chooseType, isDay)}
       </div>
     );
   }
@@ -874,6 +874,7 @@ function getTexture(type) {
 }
 
 function GetDots(index, isDay) {
+  console.log(isDay);
   return (
     <svg
       width="86"
